@@ -6,6 +6,7 @@ import com.hzx.ai.model.Customer;
 import com.hzx.ai.model.dto.BookingDetails;
 import com.hzx.ai.model.enums.BookingCategoryEnum;
 import com.hzx.ai.model.enums.BookingStatusEnum;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -38,6 +39,7 @@ import java.util.Random;
  * @since 2024-01-01
  */
 @Service
+@Slf4j
 public class FlightBookingService {
 
     private final BookingData db;
@@ -106,8 +108,8 @@ public class FlightBookingService {
         // 重置数据库数据
         db.setCustomers(customers);
         db.setBookings(bookings);
-        
-        System.out.println("✅ 演示数据初始化完成，共创建 " + customers.size() + " 个客户，" + bookings.size() + " 个航班预订");
+
+        log.info("✅ 演示数据初始化完成，共创建 {} 个客户，{} 个航班预订", customers.size(), bookings.size());
     }
 
     /**
@@ -196,8 +198,7 @@ public class FlightBookingService {
         booking.setFrom(from);
         booking.setTo(to);
 
-        System.out.printf("✅ 预订 %s 修改成功，新日期：%s，出发地：%s，目的地：%s%n",
-                bookingNumber, newDate, from, to);
+        log.info("✅ 预订 {} 修改成功，新日期：{}，出发地：{}，目的地：{}", bookingNumber, newDate, from, to);
     }
 
     /**
@@ -220,7 +221,8 @@ public class FlightBookingService {
         // 更新预订状态为已取消
         booking.setBookingStatus(BookingStatusEnum.CANCELLED);
 
-        System.out.printf("✅ 预订 %s 取消成功%n", bookingNumber);
+        log.info("✅ 预订 {} 取消成功", bookingNumber);
+
     }
 
 }
