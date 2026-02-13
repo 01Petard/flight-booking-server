@@ -1,5 +1,6 @@
 package com.hzx.ai;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.chat.memory.InMemoryChatMemory;
 import org.springframework.ai.embedding.EmbeddingModel;
@@ -33,6 +34,7 @@ import org.springframework.core.io.Resource;
  * @since 2024-01-01
  */
 @SpringBootApplication
+@Slf4j
 public class FlightBookingApplication {
 
     /**
@@ -70,8 +72,8 @@ public class FlightBookingApplication {
             
             // 3. 将分割后的文档写入向量存储
             vectorStore.write(splitDocuments);
-            
-            System.out.println("✅ 服务条款文档已成功导入向量数据库");
+
+            log.info("✅ 服务条款文档已成功导入向量数据库");
         };
     }
 
