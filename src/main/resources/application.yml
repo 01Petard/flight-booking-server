@@ -14,7 +14,6 @@ spring:
         model: shaw/dmeta-embedding-zh-small:latest
       chat:
         model: qwen3:0.6b
-        #        model: qwen2.5vl:3b
         options:
           temperature: 0.8
     openai:
