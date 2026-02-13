@@ -1,4 +1,4 @@
-package com.hzx.ai.services;
+package com.hzx.ai.tool;
 
 import org.springframework.ai.chat.client.RequestResponseAdvisor;
 import org.springframework.ai.chat.client.advisor.api.AdvisedRequest;

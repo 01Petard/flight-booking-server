@@ -1,7 +1,11 @@
 package com.hzx.ai.services;
 
-import com.hzx.ai.model.*;
-import com.hzx.ai.services.BookingTools.BookingDetails;
+import com.hzx.ai.model.Booking;
+import com.hzx.ai.model.BookingData;
+import com.hzx.ai.model.Customer;
+import com.hzx.ai.model.dto.BookingDetails;
+import com.hzx.ai.model.enums.BookingCategoryEnum;
+import com.hzx.ai.model.enums.BookingStatusEnum;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -54,7 +58,9 @@ public class FlightBookingService {
      */
     private void initDemoData() {
         // 示例客户姓名
-        List<String> names = List.of("徐庶", "诸葛", "百里", "楼兰", "庄周");
+        List<String> names = List.of(
+                "徐庶", "诸葛", "百里", "楼兰", "庄周"
+        );
         
         // 示例机场代码
         List<String> airportCodes = List.of(
@@ -63,8 +69,8 @@ public class FlightBookingService {
         );
         
         Random random = new Random();
-        var customers = new ArrayList<Customer>();
-        var bookings = new ArrayList<Booking>();
+        List<Customer> customers = new ArrayList<>();
+        List<Booking> bookings = new ArrayList<>();
 
         // 为每个客户创建航班预订
         for (int i = 0; i < 5; i++) {
@@ -111,7 +117,16 @@ public class FlightBookingService {
      */
     public List<BookingDetails> getBookings() {
         return db.getBookings().stream()
-                .map(this::toBookingDetails)
+                .map(booking ->
+                        new BookingDetails(
+                                booking.getBookingNumber(),           // 预订号
+                                booking.getCustomer().getName(),      // 客户姓名
+                                booking.getDate(),                    // 航班日期
+                                booking.getBookingStatus(),           // 预订状态
+                                booking.getFrom(),                    // 出发地
+                                booking.getTo(),                      // 目的地
+                                booking.getBookingClass().toString()  // 舱位等级
+                        ))
                 .toList();
     }
 
@@ -143,8 +158,16 @@ public class FlightBookingService {
      * @throws IllegalArgumentException 当预订不存在时抛出异常
      */
     public BookingDetails getBookingDetails(String bookingNumber, String name) {
-        var booking = findBooking(bookingNumber, name);
-        return toBookingDetails(booking);
+        Booking booking = findBooking(bookingNumber, name);
+        return new BookingDetails(
+                booking.getBookingNumber(),           // 预订号
+                booking.getCustomer().getName(),      // 客户姓名
+                booking.getDate(),                    // 航班日期
+                booking.getBookingStatus(),           // 预订状态
+                booking.getFrom(),                    // 出发地
+                booking.getTo(),                      // 目的地
+                booking.getBookingClass().toString()  // 舱位等级
+        );
     }
 
     /**
@@ -200,21 +223,4 @@ public class FlightBookingService {
         System.out.printf("✅ 预订 %s 取消成功%n", bookingNumber);
     }
 
-    /**
-     * 将Booking对象转换为BookingDetails对象
-     * 
-     * @param booking 航班预订对象
-     * @return BookingDetails 预订详情对象
-     */
-    private BookingDetails toBookingDetails(Booking booking) {
-        return new BookingDetails(
-            booking.getBookingNumber(),           // 预订号
-            booking.getCustomer().getName(),      // 客户姓名
-            booking.getDate(),                    // 航班日期
-            booking.getBookingStatus(),           // 预订状态
-            booking.getFrom(),                    // 出发地
-            booking.getTo(),                      // 目的地
-            booking.getBookingClass().toString()  // 舱位等级
-        );
-    }
 }

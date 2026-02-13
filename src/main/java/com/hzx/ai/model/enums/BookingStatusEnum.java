@@ -1,4 +1,4 @@
-package com.hzx.ai.model;
+package com.hzx.ai.model.enums;
 
 /**
  * 航班预订状态枚举

@@ -1,8 +1,10 @@
-package com.hzx.ai.services;
+package com.hzx.ai.tool;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.hzx.ai.model.BookingStatusEnum;
+import com.hzx.ai.model.dto.BookingDetails;
+import com.hzx.ai.model.request.BookingDetailsRequest;
+import com.hzx.ai.model.request.CancelBookingRequest;
+import com.hzx.ai.model.request.ChangeBookingDatesRequest;
+import com.hzx.ai.services.FlightBookingService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +13,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Description;
 import org.springframework.core.NestedExceptionUtils;
 
-import java.time.LocalDate;
 import java.util.function.Function;
 
 /**
@@ -129,62 +130,5 @@ public class BookingTools {
                 return "取消失败：" + errorMessage;
             }
         };
-    }
-
-    // ==================== 请求和响应记录类 ====================
-
-    /**
-     * 查询预订详情的请求参数
-     * 
-     * @param bookingNumber 预订号
-     * @param name 客户姓名
-     */
-    public record BookingDetailsRequest(String bookingNumber, String name) {
-    }
-
-    /**
-     * 修改预订信息的请求参数
-     * 
-     * @param bookingNumber 预订号
-     * @param name 客户姓名
-     * @param date 新的航班日期
-     * @param from 新的出发地
-     * @param to 新的目的地
-     */
-    public record ChangeBookingDatesRequest(String bookingNumber, String name, String date, String from, String to) {
-    }
-
-    /**
-     * 取消预订的请求参数
-     * 
-     * @param bookingNumber 预订号
-     * @param name 客户姓名
-     */
-    public record CancelBookingRequest(String bookingNumber, String name) {
-    }
-
-    /**
-     * 预订详情响应数据
-     * 
-     * <p>包含航班预订的完整信息，用于AI聊天机器人向用户展示预订详情。</p>
-     * 
-     * @param bookingNumber 预订号
-     * @param name 客户姓名
-     * @param date 航班日期
-     * @param bookingStatus 预订状态
-     * @param from 出发地
-     * @param to 目的地
-     * @param bookingClass 舱位等级
-     */
-    @JsonInclude(Include.NON_NULL)
-    public record BookingDetails(
-        String bookingNumber, 
-        String name, 
-        LocalDate date, 
-        BookingStatusEnum bookingStatus,
-        String from, 
-        String to, 
-        String bookingClass
-    ) {
     }
 }

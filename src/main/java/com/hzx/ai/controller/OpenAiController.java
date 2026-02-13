@@ -1,6 +1,7 @@
 package com.hzx.ai.controller;
 
-import com.hzx.ai.services.LoggingAdvisor;
+import com.hzx.ai.tool.LoggingAdvisor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.PromptChatMemoryAdvisor;
 import org.springframework.ai.chat.client.advisor.QuestionAnswerAdvisor;
@@ -38,6 +39,7 @@ import static org.springframework.ai.chat.client.advisor.AbstractChatMemoryAdvis
 @RestController
 @RequestMapping("/api/ai")
 @CrossOrigin(origins = "*", maxAge = 3600)
+@Slf4j
 public class OpenAiController {
 
     private final ChatClient chatClient;
@@ -50,7 +52,11 @@ public class OpenAiController {
      * @param vectorStore       向量存储，用于RAG检索
      * @param chatMemory        聊天记忆管理器
      */
-    public OpenAiController(ChatClient.Builder chatClientBuilder, VectorStore vectorStore, ChatMemory chatMemory) {
+    public OpenAiController(
+            ChatClient.Builder chatClientBuilder,
+            VectorStore vectorStore,
+            ChatMemory chatMemory
+    ) {
         this.chatClient = chatClientBuilder
                 .defaultSystem("""
                         您是"图灵航空"公司的客户聊天支持代理。请以友好、乐于助人且愉快的方式来回复。
@@ -72,10 +78,12 @@ public class OpenAiController {
                         // RAG检索顾问
                         new QuestionAnswerAdvisor(vectorStore, SearchRequest.query("预定航班")),
                         // 日志记录顾问
-                        new LoggingAdvisor())
+                        new LoggingAdvisor()
+                )
                 // 函数调用
                 .defaultFunctions("getBookingDetails", "changeBooking", "cancelBooking")
                 .build();
+        log.info("AI客服已创建！");
     }
 
     /**
@@ -88,7 +96,8 @@ public class OpenAiController {
      */
     @GetMapping(value = "/chat/stream", produces = "text/plain;charset=utf-8")
     public Flux<String> generateStreamAsString(
-            @RequestParam(value = "message", defaultValue = "你好，请介绍一下图灵航空") String message) {
+            @RequestParam(value = "message", defaultValue = "你好，请介绍一下图灵航空") String message
+    ) {
 
         // 获取流式响应
         Flux<String> content = chatClient.prompt()
@@ -120,7 +129,8 @@ public class OpenAiController {
      */
     @GetMapping("/chat")
     public String chat(
-            @RequestParam(value = "message", defaultValue = "你好，请介绍一下图灵航空") String message) {
+            @RequestParam(value = "message", defaultValue = "你好，请介绍一下图灵航空") String message
+    ) {
 
         return chatClient.prompt()
                 .system(s -> s.param("current_date", LocalDate.now().toString()))

@@ -1,5 +1,7 @@
 package com.hzx.ai.model;
 
+import com.hzx.ai.model.enums.BookingCategoryEnum;
+import com.hzx.ai.model.enums.BookingStatusEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -92,8 +94,13 @@ public class Booking {
      * @param to 目的地
      * @param bookingClass 舱位等级
      */
-    public Booking(String bookingNumber, LocalDate date, Customer customer, BookingStatusEnum bookingStatus, String from,
-                   String to, BookingCategoryEnum bookingClass) {
+    public Booking(String bookingNumber,
+                   LocalDate date,
+                   Customer customer,
+                   BookingStatusEnum bookingStatus,
+                   String from,
+                   String to,
+                   BookingCategoryEnum bookingClass) {
         this.bookingNumber = bookingNumber;
         this.date = date;
         this.customer = customer;

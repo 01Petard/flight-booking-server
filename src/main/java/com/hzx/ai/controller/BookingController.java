@@ -1,6 +1,6 @@
 package com.hzx.ai.controller;
 
-import com.hzx.ai.services.BookingTools.BookingDetails;
+import com.hzx.ai.model.dto.BookingDetails;
 import com.hzx.ai.services.FlightBookingService;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.CrossOrigin;
